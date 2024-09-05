@@ -1,5 +1,6 @@
 import { type ChangeEvent, FormEvent, useState } from 'react';
 import { createRandomId } from 'src/helper/createRandomId';
+import { addPost } from '../api/mockApi';
 import Button from '../Button/Button';
 import { IPost } from '../PostList/PostList';
 import s from './NewPost.module.css';
@@ -20,20 +21,26 @@ export default function NewPost({ onCancel, onAddPost }: NewPostProps) {
     setEnteredBody(evt.target.value);
   };
 
-  const submitHandler = (evt: FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (!enteredAuthor && !enteredBody) {
       alert('Entered your post and your name!');
       return;
     }
-
-    onAddPost({
+    const newPost = {
       id: createRandomId(),
       author: enteredAuthor,
       body: enteredBody,
-    });
-    onCancel();
+    };
+
+    try {
+      await addPost(newPost);
+      onAddPost(newPost);
+      onCancel();
+    } catch (e: unknown) {
+      console.error((e as Error).message);
+    }
   };
 
   return (

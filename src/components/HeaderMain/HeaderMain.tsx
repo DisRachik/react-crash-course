@@ -1,5 +1,5 @@
 import { MdMessage, MdPostAdd } from 'react-icons/md';
-import Button from '../Button/Button';
+import Button from 'src/components/Button/Button';
 import s from './HeaderMain.module.css';
 
 interface HeaderMainProps {

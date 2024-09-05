@@ -3,15 +3,15 @@ import { useEffect, type ReactNode } from 'react';
 import s from './Modal.module.css';
 
 interface ModalProps {
-  toggleModal: () => void;
+  onCloseModal: () => void;
   children: ReactNode;
 }
-export default function Modal({ toggleModal, children }: ModalProps) {
+export default function Modal({ onCloseModal, children }: ModalProps) {
   useEffect(() => {
     const handleCloseEsc = (evt: KeyboardEvent) => {
       if (evt.code === 'Escape') {
         console.log('Escape');
-        toggleModal();
+        onCloseModal();
         return;
       }
     };
@@ -19,11 +19,11 @@ export default function Modal({ toggleModal, children }: ModalProps) {
     return () => {
       document.removeEventListener('keydown', handleCloseEsc);
     };
-  }, [toggleModal]);
+  }, [onCloseModal]);
 
   return (
     <>
-      <div className={s.backdrop} onClick={toggleModal} />
+      <div className={s.backdrop} onClick={onCloseModal} />
       <dialog open className={s.modal}>
         {children}
       </dialog>

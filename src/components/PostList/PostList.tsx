@@ -1,7 +1,7 @@
-import { ChangeEvent, useState } from 'react';
-import Modal from '../Modal/Modal';
-import NewPost from '../NewPost/NewPost';
-import Post from '../Post/Post';
+import { Fragment, useState } from 'react';
+import Modal from 'src/components/Modal/Modal';
+import NewPost from 'src/components/NewPost/NewPost';
+import Post from 'src/components/Post/Post';
 import s from './PostList.module.css';
 
 interface PostListProps {
@@ -9,31 +9,39 @@ interface PostListProps {
   onStopPosting: () => void;
 }
 
-const initialState = {
-  author: 'Someone',
-  body: 'first message',
-};
+export interface IPost {
+  id: string;
+  author: string;
+  body: string;
+}
 
 export default function PostList({ isPosting, onStopPosting }: PostListProps) {
-  const [enteredPost, setEnteredPost] = useState(initialState);
+  const [enteredPosts, setEnteredPosts] = useState<IPost[]>([]);
 
-  const authorChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    setEnteredPost(prev => ({ ...prev, author: event.target.value }));
-  };
-  const bodyChangeHandler = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setEnteredPost(prev => ({ ...prev, body: event.target.value }));
+  const addPostHandler = (postData: IPost) => {
+    setEnteredPosts(prev => [postData, ...prev]);
   };
 
   return (
     <>
-      <ul className={s.posts}>
-        <Post author={enteredPost.author} body={enteredPost.body} />
-        <Post author='Rachik' body='second message' />
-      </ul>
+      {enteredPosts.length ? (
+        <ul className={s.posts}>
+          {enteredPosts.map(({ id, author, body }) => (
+            <Fragment key={id}>
+              <Post author={author} body={body} />
+            </Fragment>
+          ))}
+        </ul>
+      ) : (
+        <div style={{ textAlign: 'center', color: 'pink' }}>
+          <h2>There haven't been posts yet.</h2>
+          <p>Start adding some!</p>
+        </div>
+      )}
 
       {isPosting ? (
-        <Modal toggleModal={onStopPosting}>
-          <NewPost onBodyChange={bodyChangeHandler} onAuthorChange={authorChangeHandler} />
+        <Modal onCloseModal={onStopPosting}>
+          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
         </Modal>
       ) : null}
     </>

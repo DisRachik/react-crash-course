@@ -1,4 +1,4 @@
-import { IPost } from '../PostList/PostList';
+import { IPost } from '../components/PostList/PostList';
 
 enum Method {
   GET = 'GET',

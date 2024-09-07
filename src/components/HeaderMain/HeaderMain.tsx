@@ -1,22 +1,19 @@
+import { Link } from 'react-router-dom';
 import { MdMessage, MdPostAdd } from 'react-icons/md';
-import Button from 'src/components/Button/Button';
+
 import s from './HeaderMain.module.css';
 
-interface HeaderMainProps {
-  onCreatePost: () => void;
-}
-
-export default function HeaderMain({ onCreatePost }: HeaderMainProps) {
+export default function HeaderMain() {
   return (
     <header className={s.header}>
       <h1 className={s.logo}>
         <MdMessage />
         React Poster
       </h1>
-      <Button className={s.button} onClick={onCreatePost} type='button'>
+      <Link className={s.button} to='/create-post'>
         <MdPostAdd />
         New Post
-      </Button>
+      </Link>
     </header>
   );
 }

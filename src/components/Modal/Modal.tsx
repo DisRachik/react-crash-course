@@ -1,17 +1,23 @@
-import { useEffect, type ReactNode } from 'react';
+import { useCallback, useEffect, type ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import s from './Modal.module.css';
 
 interface ModalProps {
-  onCloseModal: () => void;
   children: ReactNode;
 }
-export default function Modal({ onCloseModal, children }: ModalProps) {
+export default function Modal({ children }: ModalProps) {
+  const navigate = useNavigate();
+
+  const closeHandler = useCallback(() => {
+    navigate('..');
+  }, [navigate]);
+
   useEffect(() => {
     const handleCloseEsc = (evt: KeyboardEvent) => {
       if (evt.code === 'Escape') {
         console.log('Escape');
-        onCloseModal();
+        closeHandler();
         return;
       }
     };
@@ -19,11 +25,11 @@ export default function Modal({ onCloseModal, children }: ModalProps) {
     return () => {
       document.removeEventListener('keydown', handleCloseEsc);
     };
-  }, [onCloseModal]);
+  }, [closeHandler]);
 
   return (
     <>
-      <div className={s.backdrop} onClick={onCloseModal} />
+      <div className={s.backdrop} onClick={closeHandler} />
       <dialog open className={s.modal}>
         {children}
       </dialog>

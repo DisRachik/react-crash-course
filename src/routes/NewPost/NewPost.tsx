@@ -1,16 +1,19 @@
 import { type ChangeEvent, FormEvent, useState } from 'react';
+
+import { addPost } from 'src/api/mockApi';
 import { createRandomId } from 'src/helper/createRandomId';
-import { addPost } from '../api/mockApi';
-import Button from '../Button/Button';
-import { IPost } from '../PostList/PostList';
+
+import Button from 'src/components/Button/Button';
+import Modal from 'src/components/Modal/Modal';
+
+import { Link } from 'react-router-dom';
 import s from './NewPost.module.css';
 
-interface NewPostProps {
-  onCancel: () => void;
-  onAddPost: (value: IPost) => void;
-}
+// interface NewPostProps {
+//   onAddPost?: (value: IPost) => void;
+// }
 
-export default function NewPost({ onCancel, onAddPost }: NewPostProps) {
+export default function NewPost() {
   const [enteredAuthor, setEnteredAuthor] = useState('');
   const [enteredBody, setEnteredBody] = useState('');
 
@@ -36,30 +39,31 @@ export default function NewPost({ onCancel, onAddPost }: NewPostProps) {
 
     try {
       await addPost(newPost);
-      onAddPost(newPost);
-      onCancel();
+      // onAddPost(newPost);
+      // onCancel();
     } catch (e: unknown) {
       console.error((e as Error).message);
     }
   };
 
   return (
-    <form className={s.form} onSubmit={submitHandler}>
-      <p>
-        <label htmlFor='body'>Text</label>
-        <textarea id='body' required rows={3} onChange={bodyChangeHandler} />
-      </p>
-      <p>
-        <label htmlFor='name'>Your name</label>
-        <input id='name' required type='text' onChange={authorChangeHandler} />
-      </p>
-
-      <div className={s.actions}>
-        <Button type='button' className={s.button} onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button className={s.button}>Submit</Button>
-      </div>
-    </form>
+    <Modal>
+      <form className={s.form} onSubmit={submitHandler}>
+        <p>
+          <label htmlFor='body'>Text</label>
+          <textarea id='body' required rows={3} onChange={bodyChangeHandler} />
+        </p>
+        <p>
+          <label htmlFor='name'>Your name</label>
+          <input id='name' required type='text' onChange={authorChangeHandler} />
+        </p>
+        <div className={s.actions}>
+          <Link to='..' type='button' className={s.button}>
+            Cancel
+          </Link>
+          <Button className={s.button}>Submit</Button>
+        </div>
+      </form>
+    </Modal>
   );
 }

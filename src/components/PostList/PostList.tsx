@@ -1,14 +1,9 @@
 import { Fragment, useEffect, useState } from 'react';
-import Modal from 'src/components/Modal/Modal';
-import NewPost from 'src/components/NewPost/NewPost';
-import Post from 'src/components/Post/Post';
-import { getPosts } from '../api/mockApi';
-import s from './PostList.module.css';
 
-interface PostListProps {
-  isPosting: boolean;
-  onStopPosting: () => void;
-}
+import { getPosts } from 'src/api/mockApi';
+import Post from 'src/components/Post/Post';
+
+import s from './PostList.module.css';
 
 export interface IPost {
   id: string;
@@ -16,7 +11,7 @@ export interface IPost {
   body: string;
 }
 
-export default function PostList({ isPosting, onStopPosting }: PostListProps) {
+export default function PostList() {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,9 +30,9 @@ export default function PostList({ isPosting, onStopPosting }: PostListProps) {
     })();
   }, []);
 
-  const addPostHandler = (postData: IPost) => {
-    setPosts(prev => [postData, ...prev]);
-  };
+  // const addPostHandler = (postData: IPost) => {
+  //   setPosts(prev => [postData, ...prev]);
+  // };
 
   return (
     <>
@@ -60,12 +55,6 @@ export default function PostList({ isPosting, onStopPosting }: PostListProps) {
           <h2>There haven't been posts yet.</h2>
           <p>Start adding some!</p>
         </div>
-      ) : null}
-
-      {isPosting ? (
-        <Modal onCloseModal={onStopPosting}>
-          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
-        </Modal>
       ) : null}
     </>
   );

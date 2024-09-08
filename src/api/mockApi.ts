@@ -1,4 +1,4 @@
-import { IPost } from '../components/PostList/PostList';
+import type { IPost } from '../components/PostList/PostList';
 
 enum Method {
   GET = 'GET',
@@ -27,6 +27,6 @@ export const getPosts = async (): Promise<IPost[]> => {
   return (await request(Method.GET)) as IPost[];
 };
 
-export const addPost = async (newPost: IPost): Promise<void> => {
+export const addPost = async (newPost: Omit<IPost, 'id'>): Promise<void> => {
   await request(Method.POST, newPost);
 };
